@@ -30,10 +30,12 @@ body {
 
 /* ИКОНКА КОРЗИНЫ */
 .cart-icon {
-    width: 20px !important;
-    height: 20px !important;
+    width: 26px !important;  /* чуть больше */
+    height: 26px !important; /* чуть больше */
     display: block;
+    filter: invert(100%);     /* белый цвет, если фон тёмный */
 }
+
 
 
 /* СЧЁТЧИК ТОВАРОВ */
