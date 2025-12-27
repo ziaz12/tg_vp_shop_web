@@ -4,9 +4,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ===== ТОВАРЫ =====
     const products = [
-        {name: "Vape Juice Strawberry", brand: "VapeCo", flavor: "Клубника", puffs: "500", price: 1200},
-        {name: "Vape Device X1", brand: "VapeTech", flavor: "Мята", puffs: "800", price: 3500},
-        {name: "Vape Device X1", brand: "VapeTech", flavor: "Мята", puffs: "1200", price: 4000}
+        {name: "Vape Strawberry 500", brand: "VapeCo", flavor: "Клубника", puffs: "500", price: 1200, type: "vape"},
+        {name: "Vape Mint 800", brand: "VapeTech", flavor: "Мята", puffs: "800", price: 1500, type: "vape"},
+        {name: "Juice Mango 30ml", brand: "VapeCo", flavor: "Манго", puffs: "-", price: 600, type: "juice"},
+        {name: "Snus Mint Pack", brand: "SnusCo", flavor: "Мята", puffs: "-", price: 500, type: "snus"},
+        {name: "Pod Recharge Pro", brand: "VapePro", flavor: "Табак", puffs: "Перезаряжаемая", price: 5000, type: "pod"}
     ];
 
     const productList = document.getElementById("product-list");
@@ -15,14 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const flavorFilter = document.getElementById("flavor-filter");
     const puffsFilter = document.getElementById("puffs-filter");
     const priceFilter = document.getElementById("price-filter");
+    const typeFilter = document.getElementById("type-filter"); // новый фильтр по типу
     const filterBtn = document.getElementById("filter-btn");
     const searchBtn = document.getElementById("search-btn");
     const cartCountEl = document.getElementById("cart-count");
-    const userBalanceEl = document.getElementById("user-balance");
-
-    // ===== БАЛАНС (пока просто отображение) =====
-    const userBalance = 0;
-    userBalanceEl.innerText = `Баланс: ${userBalance} ₽`;
 
     // ===== РЕНДЕР ТОВАРОВ =====
     function renderProducts() {
@@ -33,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const flavor = flavorFilter.value;
         const puffs = puffsFilter.value;
         const priceMax = parseInt(priceFilter.value);
+        const type = typeFilter.value; // значение фильтра типа
 
         products.forEach(p => {
             const matches =
@@ -40,7 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 (!brand || p.brand === brand) &&
                 (!flavor || p.flavor === flavor) &&
                 (!puffs || p.puffs === puffs) &&
-                (!priceMax || p.price <= priceMax);
+                (!priceMax || p.price <= priceMax) &&
+                (!type || p.type === type); // проверка типа товара
 
             if (matches) {
                 const div = document.createElement("div");
@@ -90,4 +90,3 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProducts();
     updateCartUI();
 });
-
