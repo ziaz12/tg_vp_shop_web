@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ===== КОРЗИНА =====
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    // ===== ОЧИЩАЕМ КОРЗИНУ ПРИ ЗАГРУЗКЕ =====
+    localStorage.removeItem("cart");
+    let cart = [];
 
     // ===== ТОВАРЫ =====
     const products = [
