@@ -1,17 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ===== СБРОС СТАРОЙ КОРЗИНЫ =====
-    localStorage.removeItem("cart");
-
-    // ===== ИНИЦИАЛИЗАЦИЯ =====
-    let cart = [];
-    localStorage.setItem("cart", JSON.stringify(cart));
+    // ===== КОРЗИНА =====
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     // ===== ТОВАРЫ =====
     const products = [
         {name: "Vape Juice Strawberry", brand: "VapeCo", flavor: "Клубника", puffs: "500", price: 1200},
         {name: "Vape Device X1", brand: "VapeTech", flavor: "Мята", puffs: "800", price: 3500},
-        {name: "Vape Device X1", brand: "VapeTech", flavor: "Мята", puffs: "1200", price: 4000},
-        {name: "Vape Device X1", brand: "VapeTech", flavor: "Мята", puffs: "1300", price: 4200}
+        {name: "Vape Device X1", brand: "VapeTech", flavor: "Мята", puffs: "1200", price: 4000}
     ];
 
     const productList = document.getElementById("product-list");
@@ -23,8 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const filterBtn = document.getElementById("filter-btn");
     const searchBtn = document.getElementById("search-btn");
     const cartCountEl = document.getElementById("cart-count");
+    const userBalanceEl = document.getElementById("user-balance");
 
-    // ===== ФУНКЦИЯ РЕНДЕРА ТОВАРОВ =====
+    // ===== БАЛАНС (пока просто отображение) =====
+    const userBalance = 0;
+    userBalanceEl.innerText = `Баланс: ${userBalance} ₽`;
+
+    // ===== РЕНДЕР ТОВАРОВ =====
     function renderProducts() {
         productList.innerHTML = "";
 
@@ -42,27 +42,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 (!puffs || p.puffs === puffs) &&
                 (!priceMax || p.price <= priceMax);
 
-            if(matches){
+            if (matches) {
                 const div = document.createElement("div");
                 div.className = "product-card";
                 div.innerHTML = `
                     <h3>${p.name}</h3>
+                    <div class="price">${p.price} ₽</div>
                     <p>Количество затяжек: ${p.puffs}</p>
                     <p>Вкус: ${p.flavor}</p>
                     <p>Бренд: ${p.brand}</p>
-                    <p>Цена: ${p.price} ₽</p>
                     <button>Добавить в корзину</button>
                 `;
                 productList.appendChild(div);
 
-                // ===== КНОПКА ДОБАВИТЬ В КОРЗИНУ =====
                 div.querySelector("button").addEventListener("click", () => {
-                    const existing = cart.find(item => item.name === p.name && item.puffs === p.puffs);
-                    if(existing){
+                    const existing = cart.find(
+                        item => item.name === p.name && item.puffs === p.puffs
+                    );
+
+                    if (existing) {
                         existing.qty += 1;
                     } else {
-                        cart.push({...p, qty: 1});
+                        cart.push({ ...p, qty: 1 });
                     }
+
                     localStorage.setItem("cart", JSON.stringify(cart));
                     updateCartUI();
                 });
@@ -70,8 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ===== ОБНОВЛЕНИЕ UI КОРЗИНЫ =====
-    function updateCartUI(){
+    // ===== КОРЗИНА UI =====
+    function updateCartUI() {
         let count = 0;
         cart.forEach(item => count += item.qty);
         cartCountEl.innerText = count;
@@ -80,9 +83,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // ===== ОБРАБОТЧИКИ =====
     filterBtn.addEventListener("click", renderProducts);
     searchBtn.addEventListener("click", renderProducts);
-    searchInput.addEventListener("keypress", (e) => { if(e.key === "Enter") renderProducts(); });
+    searchInput.addEventListener("keypress", e => {
+        if (e.key === "Enter") renderProducts();
+    });
 
-    // ===== НАЧАЛЬНЫЙ РЕНДЕР =====
     renderProducts();
     updateCartUI();
 });
+
