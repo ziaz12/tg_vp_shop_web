@@ -9,23 +9,53 @@
 <body>
     <header class="top-bar">
         <div class="logo">🫧 Vape Shop</div>
+        <div class="header-right">
+            <div id="balance-bar">
+                💰 <span id="user-balance">5000 ₽</span>
+            </div>
+            <button id="cart-button">
+                🛒 Корзина: <span id="cart-count">0</span>
+            </button>
+        </div>
     </header>
 
-    <!-- Каталог товаров -->
-    <section id="product-list">
-        <div class="product-card">
-            <h3>Vape Juice Strawberry</h3>
-            <p>Количество затяжек: 500</p>
-            <p>Вкус: Клубника</p>
-            <p>Бренд: VapeCo</p>
-        </div>
-
-        <div class="product-card">
-            <h3>Vape Device X1</h3>
-            <p>Количество затяжек: 800</p>
-            <p>Вкус: Мята</p>
-            <p>Бренд: VapeTech</p>
-        </div>
+    <!-- Поиск -->
+    <section id="search-section">
+        <input type="text" placeholder="Поиск по названию" id="search-input">
+        <button id="search-btn">Найти</button>
     </section>
+
+    <!-- Фильтры -->
+    <section id="filters">
+        <select id="brand-filter">
+            <option value="">Все бренды</option>
+            <option value="VapeCo">VapeCo</option>
+            <option value="VapeTech">VapeTech</option>
+        </select>
+
+        <select id="flavor-filter">
+            <option value="">Вкус</option>
+            <option value="Клубника">Клубника</option>
+            <option value="Мята">Мята</option>
+            <option value="Манго">Манго</option>
+        </select>
+
+        <select id="puffs-filter">
+            <option value="">Количество затяжек</option>
+            <option value="500">500</option>
+            <option value="800">800</option>
+            <option value="1000">1000</option>
+            <option value="1200">1200</option>
+            <option value="1300">1300</option>
+        </select>
+
+        <input type="number" placeholder="Цена до" id="price-filter">
+        <button id="filter-btn">Применить</button>
+    </section>
+
+    <!-- Каталог товаров -->
+    <section id="product-list"></section>
+
+    <script src="script.js"></script>
 </body>
 </html>
