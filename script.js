@@ -1,13 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ===== СБРОС СТАРОЙ КОРЗИНЫ И БАЛАНСА =====
+    // ===== СБРОС СТАРОЙ КОРЗИНЫ =====
     localStorage.removeItem("cart");
-    localStorage.removeItem("user-balance");
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
     let cart = [];
-    let userBalance = 5000; // начальный баланс пользователя
     localStorage.setItem("cart", JSON.stringify(cart));
-    localStorage.setItem("user-balance", userBalance);
 
     // ===== ТОВАРЫ =====
     const products = [
@@ -26,9 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const filterBtn = document.getElementById("filter-btn");
     const searchBtn = document.getElementById("search-btn");
     const cartCountEl = document.getElementById("cart-count");
-    const userBalanceEl = document.getElementById("user-balance");
-
-    userBalanceEl.innerText = userBalance + " ₽";
 
     // ===== ФУНКЦИЯ РЕНДЕРА ТОВАРОВ =====
     function renderProducts() {
@@ -57,28 +51,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>Вкус: ${p.flavor}</p>
                     <p>Бренд: ${p.brand}</p>
                     <p>Цена: ${p.price} ₽</p>
-                    <button>Купить</button>
+                    <button>Добавить в корзину</button>
                 `;
                 productList.appendChild(div);
 
-                // ===== КНОПКА КУПИТЬ =====
+                // ===== КНОПКА ДОБАВИТЬ В КОРЗИНУ =====
                 div.querySelector("button").addEventListener("click", () => {
-                    if(userBalance >= p.price){
-                        userBalance -= p.price;
-                        userBalanceEl.innerText = userBalance + " ₽";
-
-                        const existing = cart.find(item => item.name === p.name && item.puffs === p.puffs);
-                        if(existing){
-                            existing.qty += 1;
-                        } else {
-                            cart.push({...p, qty: 1});
-                        }
-
-                        localStorage.setItem("cart", JSON.stringify(cart));
-                        updateCartUI();
+                    const existing = cart.find(item => item.name === p.name && item.puffs === p.puffs);
+                    if(existing){
+                        existing.qty += 1;
                     } else {
-                        alert("Недостаточно средств!");
+                        cart.push({...p, qty: 1});
                     }
+                    localStorage.setItem("cart", JSON.stringify(cart));
+                    updateCartUI();
                 });
             }
         });
