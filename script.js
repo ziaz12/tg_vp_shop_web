@@ -1,5 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Товары
+    // ===== СБРОС СТАРОЙ КОРЗИНЫ И БАЛАНСА =====
+    localStorage.removeItem("cart");
+    localStorage.removeItem("user-balance");
+
+    // ===== ИНИЦИАЛИЗАЦИЯ =====
+    let cart = [];
+    let userBalance = 5000; // начальный баланс пользователя
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("user-balance", userBalance);
+
+    // ===== ТОВАРЫ =====
     const products = [
         {name: "Vape Juice Strawberry", brand: "VapeCo", flavor: "Клубника", puffs: "500", price: 1200},
         {name: "Vape Device X1", brand: "VapeTech", flavor: "Мята", puffs: "800", price: 3500},
@@ -18,9 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartCountEl = document.getElementById("cart-count");
     const userBalanceEl = document.getElementById("user-balance");
 
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let userBalance = parseInt(userBalanceEl.innerText);
+    userBalanceEl.innerText = userBalance + " ₽";
 
+    // ===== ФУНКЦИЯ РЕНДЕРА ТОВАРОВ =====
     function renderProducts() {
         productList.innerHTML = "";
 
@@ -51,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
                 productList.appendChild(div);
 
-                // Кнопка купить
+                // ===== КНОПКА КУПИТЬ =====
                 div.querySelector("button").addEventListener("click", () => {
                     if(userBalance >= p.price){
                         userBalance -= p.price;
@@ -63,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         } else {
                             cart.push({...p, qty: 1});
                         }
+
                         localStorage.setItem("cart", JSON.stringify(cart));
                         updateCartUI();
                     } else {
@@ -73,18 +84,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // ===== ОБНОВЛЕНИЕ UI КОРЗИНЫ =====
     function updateCartUI(){
         let count = 0;
         cart.forEach(item => count += item.qty);
         cartCountEl.innerText = count;
     }
 
-    // Обработчики
+    // ===== ОБРАБОТЧИКИ =====
     filterBtn.addEventListener("click", renderProducts);
     searchBtn.addEventListener("click", renderProducts);
     searchInput.addEventListener("keypress", (e) => { if(e.key === "Enter") renderProducts(); });
 
-    // Начальный рендер
+    // ===== НАЧАЛЬНЫЙ РЕНДЕР =====
     renderProducts();
     updateCartUI();
 });
