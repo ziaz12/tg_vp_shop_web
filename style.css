@@ -19,43 +19,49 @@ body {
     gap: 10px;
 }
 
-#balance-bar {
-    font-weight: bold;
-}
-
+/* КНОПКА КОРЗИНЫ */
 #cart-button {
     background: none;
     border: none;
     position: relative;
     cursor: pointer;
-    padding: 0;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* ИКОНКА КОРЗИНЫ */
 .cart-icon {
-    width: 26px;
-    height: 26px;
+    width: 20px;
+    height: 20px;
+    display: block;
 }
 
+/* СЧЁТЧИК ТОВАРОВ */
 #cart-count {
     position: absolute;
-    top: -6px;
-    right: -6px;
+    top: -4px;
+    right: -4px;
     background: #3b82f6;
     color: white;
     border-radius: 999px;
-    padding: 2px 6px;
-    font-size: 11px;
+    padding: 2px 5px;
+    font-size: 10px;
     font-weight: bold;
 }
 
-#search-section, #filters {
+#search-section,
+#filters {
     padding: 10px;
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
 }
 
-input, select, button {
+input,
+select,
+button {
     padding: 6px;
     border-radius: 8px;
     border: none;
@@ -95,3 +101,4 @@ button {
     margin-top: 6px;
     width: 100%;
 }
+
