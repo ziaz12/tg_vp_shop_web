@@ -33,10 +33,13 @@ body {
 
 /* ИКОНКА КОРЗИНЫ */
 .cart-icon {
-    width: 20px;
-    height: 20px;
-    display: block;
+    width: 16px !important;
+    height: 16px !important;
+    max-width: 16px;
+    max-height: 16px;
+    object-fit: contain;
 }
+
 
 /* СЧЁТЧИК ТОВАРОВ */
 #cart-count {
