@@ -132,18 +132,17 @@ button {
     display: flex;
     gap: 12px;
     background: #121b2f;
-    padding: 8px; /* уменьшили padding сверху/снизу */
+    padding: 10px;
     border-radius: 12px;
     align-items: center;
 }
 
 .cart-img {
-    width: 100px;   /* было 80px, сделали больше */
-    height: 100px;  /* было 80px, сделали больше */
+    width: 80px;
+    height: 80px;
     object-fit: cover;
     border-radius: 8px;
 }
-
 
 .cart-info h3 {
     margin: 0;
