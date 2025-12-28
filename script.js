@@ -88,13 +88,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 const div = document.createElement("div");
                 div.className = "product-card";
                 div.innerHTML = `
+                    <img src="${p.img}" alt="${p.name}" class="product-img">
                     <h3>${p.name}</h3>
                     <div class="price">${p.price} ₽</div>
                     <p>Количество затяжек: ${p.puffs}</p>
                     <p>Вкус: ${p.flavor}</p>
                     <p>Бренд: ${p.brand}</p>
                     <button>Добавить в корзину</button>
-                `;
+                    `;
+
                 productList.appendChild(div);
 
                 div.querySelector("button").addEventListener("click", () => {
