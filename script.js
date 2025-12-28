@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         puffs: "500",
         price: 1200,
         type: "vape",
-        img: "images/vape1.jpg"
+        img: "https://github.com/ziaz12/tg_vp_shop_web/commit/6fffb775fd6eaea311968d642ec63114e847a546"
     },
     {
         name: "Vape Mint 800",
