@@ -38,12 +38,12 @@ body {
     filter: invert(100%);
 }
 
-/* СЧЁТЧИК В КОРЗИНЕ */
+/* СЧЁТЧИК В КОРЗИНЕ (СИНИЙ) */
 #cart-count {
     position: absolute;
     top: -6px;
     right: -6px;
-    background: #334155;
+    background: #2563eb;
     color: white;
     border-radius: 999px;
     padding: 2px 6px;
@@ -69,10 +69,11 @@ button {
     font-size: 14px;
 }
 
+/* 🔵 ВСЕ КНОПКИ — СИНИЕ */
 button {
     cursor: pointer;
-    background: #1e293b; /* тёмный */
-    color: #eaeaf0;
+    background: #2563eb;
+    color: white;
 }
 
 /* ===== СЕТКА ТОВАРОВ ===== */
@@ -89,10 +90,9 @@ button {
     border-radius: 12px;
     padding: 10px;
     text-align: center;
-
     display: flex;
     flex-direction: column;
-    align-items: center; /* 🔥 ЦЕНТР */
+    align-items: center;
 }
 
 .product-card h3 {
@@ -104,7 +104,6 @@ button {
     font-size: 14px;
 }
 
-/* КНОПКА "ДОБАВИТЬ" */
 .product-card button {
     margin-top: 8px;
     width: 100%;
@@ -119,11 +118,11 @@ button {
     margin-bottom: 8px;
 }
 
-/* ===== СЧЁТЧИК + − В КАРТОЧКЕ ===== */
+/* ===== СЧЁТЧИК + − (СЕРЫЙ) ===== */
 .qty-controls {
     display: flex;
     align-items: center;
-    justify-content: center; /* 🔥 ПО ЦЕНТРУ */
+    justify-content: center;
     gap: 12px;
     margin-top: 10px;
 }
@@ -135,13 +134,18 @@ button {
     font-weight: bold;
 }
 
+/* ➕➖ СЕРЫЕ */
 .qty-controls button {
     width: 32px;
     height: 32px;
     border-radius: 8px;
-    background: #1e293b;
+    background: #334155;
     color: #eaeaf0;
     font-size: 18px;
+}
+
+.qty-controls button:hover {
+    background: #475569;
 }
 
 /* ===== МОБИЛКА ===== */
@@ -156,33 +160,27 @@ button {
     position: fixed;
     bottom: 24px;
     left: 50%;
-    transform: translateX(-50%); /* 🔥 центр по ширине */
-
+    transform: translateX(-50%);
     width: 52px;
     height: 52px;
-
     background: #1e293b;
     color: #eaeaf0;
-
     border: none;
     border-radius: 50%;
     font-size: 20px;
-    line-height: 1;
-
     cursor: pointer;
     display: none;
     z-index: 1000;
 }
 
 /* ============================= */
-/* ====== FIX ДЛЯ КОРЗИНЫ ====== */
+/* ====== КОРЗИНА ====== */
 /* ============================= */
 
 #cart-section {
     padding: 16px;
 }
 
-/* ТОВАР В КОРЗИНЕ */
 .cart-item {
     display: flex;
     align-items: center;
@@ -192,7 +190,6 @@ button {
     border-radius: 12px;
 }
 
-/* КАРТИНКА */
 .cart-img {
     width: 90px;
     height: 90px;
@@ -200,7 +197,6 @@ button {
     border-radius: 8px;
 }
 
-/* ИНФО */
 .cart-info {
     flex: 1;
 }
@@ -215,28 +211,28 @@ button {
     font-size: 14px;
 }
 
-/* КНОПКИ + - В КОРЗИНЕ */
+/* + − В КОРЗИНЕ — СЕРЫЕ */
 .cart-item .qty-controls {
-    justify-content: flex-start; /* ❗ не по центру */
+    justify-content: flex-start;
     gap: 8px;
     margin-top: 6px;
 }
 
 .cart-item .qty-controls button {
-    width: 28px;
-    height: 28px;
-    font-size: 16px;
+    background: #334155;
 }
 
-/* КНОПКА УДАЛЕНИЯ */
+/* ❌ УДАЛЕНИЕ */
 .remove-btn {
-    background: #7f1d1d;
-    color: #fff;
-    border: none;
+    background: #dc2626;
+    color: white;
     border-radius: 6px;
     padding: 6px 10px;
-    cursor: pointer;
     margin-left: 10px;
+}
+
+.remove-btn:hover {
+    background: #b91c1c;
 }
 
 /* ИТОГО */
@@ -246,15 +242,17 @@ button {
     font-weight: bold;
 }
 
-/* ОПЛАТА */
+/* 💳 ОПЛАТА — СИНЯЯ */
 #checkout-btn {
     margin-top: 12px;
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    background: #1e293b;
-    color: #eaeaf0;
+    background: #2563eb;
     border-radius: 10px;
 }
 
+#checkout-btn:hover {
+    background: #1d4ed8;
+}
 
