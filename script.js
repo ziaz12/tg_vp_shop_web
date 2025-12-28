@@ -66,55 +66,95 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ===== РЕНДЕР ТОВАРОВ =====
     function renderProducts() {
-        productList.innerHTML = "";
+    productList.innerHTML = "";
 
-        const search = searchInput.value.toLowerCase();
-        const brand = brandFilter.value;
-        const flavor = flavorFilter.value;
-        const puffs = puffsFilter.value;
-        const priceMax = parseInt(priceFilter.value);
-        const type = typeFilter.value;
+    const search = searchInput.value.toLowerCase();
+    const brand = brandFilter.value;
+    const flavor = flavorFilter.value;
+    const puffs = puffsFilter.value;
+    const priceMax = parseInt(priceFilter.value);
+    const type = typeFilter.value;
 
-        products.forEach(p => {
-            const matches =
-                (!search || p.name.toLowerCase().includes(search)) &&
-                (!brand || p.brand === brand) &&
-                (!flavor || p.flavor === flavor) &&
-                (!puffs || p.puffs === puffs) &&
-                (!priceMax || p.price <= priceMax) &&
-                (!type || p.type === type);
+    products.forEach(p => {
+        const matches =
+            (!search || p.name.toLowerCase().includes(search)) &&
+            (!brand || p.brand === brand) &&
+            (!flavor || p.flavor === flavor) &&
+            (!puffs || p.puffs === puffs) &&
+            (!priceMax || p.price <= priceMax) &&
+            (!type || p.type === type);
 
-            if (!matches) return;
+        if (!matches) return;
 
-            const div = document.createElement("div");
-            div.className = "product-card";
-            div.innerHTML = `
-                <img src="${p.img}?v=${Date.now()}" alt="${p.name}" class="product-img">
-                <h3>${p.name}</h3>
-                <div class="price">${p.price} ₽</div>
-                <p>Затяжки: ${p.puffs}</p>
-                <p>Вкус: ${p.flavor}</p>
-                <p>Бренд: ${p.brand}</p>
-                <button>Добавить в корзину</button>
-            `;
+        const div = document.createElement("div");
+        div.className = "product-card";
+        div.innerHTML = `
+            <img src="${p.img}" class="product-img">
+            <h3>${p.name}</h3>
+            <div class="price">${p.price} ₽</div>
+            <p>Затяжки: ${p.puffs}</p>
+            <p>Вкус: ${p.flavor}</p>
+            <p>Бренд: ${p.brand}</p>
+            <div class="cart-action">
+                <button class="add-btn">Добавить в корзину</button>
+            </div>
+        `;
+        productList.appendChild(div);
 
-            // ===== ДОБАВИТЬ В КОРЗИНУ =====
-            div.querySelector("button").addEventListener("click", () => {
-                const existing = cart.find(i => i.name === p.name && i.puffs === p.puffs);
+        const cartAction = div.querySelector(".cart-action");
 
-                if (existing) {
-                    existing.qty += 1;
-                } else {
+        function updateButton() {
+            const item = cart.find(i => i.name === p.name);
+            if (item) {
+                cartAction.innerHTML = `
+                    <div class="qty-controls">
+                        <button class="minus">-</button>
+                        <span>${item.qty}</span>
+                        <button class="plus">+</button>
+                    </div>
+                `;
+
+                cartAction.querySelector(".plus").addEventListener("click", () => {
+                    item.qty += 1;
+                    saveCart();
+                    updateButton();
+                    updateCartUI();
+                });
+
+                cartAction.querySelector(".minus").addEventListener("click", () => {
+                    if (item.qty > 1) {
+                        item.qty -= 1;
+                    } else {
+                        cart = cart.filter(i => i.name !== p.name);
+                    }
+                    saveCart();
+                    updateButton();
+                    updateCartUI();
+                });
+            } else {
+                cartAction.innerHTML = `<button class="add-btn">Добавить в корзину</button>`;
+                cartAction.querySelector(".add-btn").addEventListener("click", () => {
                     cart.push({ ...p, qty: 1 });
-                }
+                    saveCart();
+                    updateButton();
+                    updateCartUI();
+                });
+            }
+        }
 
-                localStorage.setItem("cart", JSON.stringify(cart));
-                updateCartUI();
-            });
+        updateButton();
+    });
+}
 
-            productList.appendChild(div);
-        });
-    }
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function updateCartUI() {
+    const count = cart.reduce((sum, i) => sum + i.qty, 0);
+    cartCountEl.innerText = count;
+}
+
 
     // ===== ОБНОВЛЕНИЕ СЧЁТЧИКА КОРЗИНЫ =====
     function updateCartUI() {
