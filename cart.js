@@ -1,11 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Получаем корзину из localStorage
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const cartItemsEl = document.getElementById("cart-items");
     const totalPriceEl = document.getElementById("total-price");
 
+    // Функция для рендера корзины
     function renderCart() {
-        cartItemsEl.innerHTML = "";
+        cartItemsEl.innerHTML = ""; // очищаем
+
+        if (cart.length === 0) {
+            cartItemsEl.innerHTML = "<p>Ваша корзина пуста</p>";
+            totalPriceEl.innerText = "0 ₽";
+            return;
+        }
+
         let total = 0;
 
         cart.forEach((item, index) => {
@@ -14,43 +23,38 @@ document.addEventListener("DOMContentLoaded", () => {
             const div = document.createElement("div");
             div.className = "cart-item";
             div.innerHTML = `
-                <img src="${item.img}" class="cart-img">
+                <img src="${item.img}" alt="${item.name}" class="cart-img">
                 <div class="cart-info">
-                    <h3>${item.name}</h3>
-                    <p>Бренд: ${item.brand}</p>
-                    <p>Вкус: ${item.flavor}</p>
-                    <p>Затяжки: ${item.puffs}</p>
+                    <h4>${item.name}</h4>
                     <p>Цена: ${item.price} ₽</p>
-                    <div class="qty-controls">
-                        <button class="decrease">−</button>
-                        <span class="qty">${item.qty}</span>
+                    <p>Количество: 
+                        <button class="decrease">-</button>
+                        <span>${item.qty}</span>
                         <button class="increase">+</button>
-                    </div>
+                    </p>
+                    <p>Итого: ${item.price * item.qty} ₽</p>
                 </div>
             `;
 
-            const decreaseBtn = div.querySelector(".decrease");
-            const increaseBtn = div.querySelector(".increase");
-            const qtyEl = div.querySelector(".qty");
-
-            decreaseBtn.addEventListener("click", () => {
-                if (item.qty > 1) {
-                    item.qty -= 1;
-                } else {
-                    cart.splice(index, 1); // удаляем если 0
-                }
+            // Кнопки +
+            div.querySelector(".increase").addEventListener("click", () => {
+                item.qty += 1;
                 saveAndRender();
             });
 
-            increaseBtn.addEventListener("click", () => {
-                item.qty += 1;
+            // Кнопки -
+            div.querySelector(".decrease").addEventListener("click", () => {
+                item.qty -= 1;
+                if (item.qty <= 0) {
+                    cart.splice(index, 1);
+                }
                 saveAndRender();
             });
 
             cartItemsEl.appendChild(div);
         });
 
-        totalPriceEl.innerText = total + " ₽";
+        totalPriceEl.innerText = `${total} ₽`;
     }
 
     function saveAndRender() {
@@ -58,12 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
         renderCart();
     }
 
+    // Кнопка "Оплатить" (можно добавить логику)
     document.getElementById("checkout-btn").addEventListener("click", () => {
-        if (cart.length === 0) {
-            alert("Корзина пуста!");
-            return;
-        }
-        alert("Оплата пока не реализована 😎");
+        alert(`Вы оплатили ${totalPriceEl.innerText}`);
+        cart = [];
+        saveAndRender();
     });
 
     renderCart();
