@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ===== КОРЗИНА (БЕЗ ОЧИСТКИ) =====
+    // ===== КОРЗИНА =====
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     // ===== ТОВАРЫ =====
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
-    // ===== ЭЛЕМЕНТЫ =====
+    // ===== ЭЛЕМЕНТЫ DOM =====
     const productList = document.getElementById("product-list");
     const searchInput = document.getElementById("search-input");
     const brandFilter = document.getElementById("brand-filter");
@@ -62,8 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const filterBtn = document.getElementById("filter-btn");
     const searchBtn = document.getElementById("search-btn");
     const cartCountEl = document.getElementById("cart-count");
+    const cartButton = document.getElementById("cart-button"); // кнопка корзины
 
-    // ===== РЕНДЕР =====
+    // ===== РЕНДЕР ТОВАРОВ =====
     function renderProducts() {
         productList.innerHTML = "";
 
@@ -88,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const div = document.createElement("div");
             div.className = "product-card";
             div.innerHTML = `
-                <img src="${p.img}?v=${Date.now()}" class="product-img">
+                <img src="${p.img}?v=${Date.now()}" alt="${p.name}" class="product-img">
                 <h3>${p.name}</h3>
                 <div class="price">${p.price} ₽</div>
                 <p>Затяжки: ${p.puffs}</p>
@@ -97,11 +98,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 <button>Добавить в корзину</button>
             `;
 
+            // ===== ДОБАВИТЬ В КОРЗИНУ =====
             div.querySelector("button").addEventListener("click", () => {
-                const item = cart.find(i => i.name === p.name);
+                const existing = cart.find(i => i.name === p.name && i.puffs === p.puffs);
 
-                if (item) {
-                    item.qty += 1;
+                if (existing) {
+                    existing.qty += 1;
                 } else {
                     cart.push({ ...p, qty: 1 });
                 }
@@ -114,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ===== СЧЁТЧИК КОРЗИНЫ =====
+    // ===== ОБНОВЛЕНИЕ СЧЁТЧИКА КОРЗИНЫ =====
     function updateCartUI() {
         const count = cart.reduce((sum, i) => sum + i.qty, 0);
         cartCountEl.innerText = count;
@@ -127,7 +129,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.key === "Enter") renderProducts();
     });
 
+    // ===== КНОПКА ПЕРЕХОДА В КОРЗИНУ =====
+    cartButton.addEventListener("click", () => {
+        window.location.href = "cart.html"; // создаём отдельную страницу cart.html
+    });
+
     // ===== СТАРТ =====
     renderProducts();
     updateCartUI();
 });
+
