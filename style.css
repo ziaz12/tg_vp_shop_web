@@ -16,7 +16,6 @@ body {
     z-index: 1000;
 }
 
-
 .header-right {
     display: flex;
     align-items: center;
@@ -40,19 +39,21 @@ body {
     filter: invert(100%);
 }
 
-/* СЧЁТЧИК ТОВАРОВ */
+/* СЧЁТЧИК ТОВАРОВ ПО ЦЕНТРУ КНОПКИ */
 #cart-count {
     position: absolute;
-    top: -6px;
-    right: -6px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background: #3b82f6;
     color: white;
-    border-radius: 999px;
+    border-radius: 50%;
     padding: 2px 6px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
 }
 
+/* Секция поиска и фильтров */
 #search-section,
 #filters {
     padding: 10px;
@@ -142,8 +143,8 @@ button {
 }
 
 .cart-img {
-    width: 80px;
-    height: 80px;
+    width: 100px; /* чуть больше */
+    height: 100px;
     object-fit: cover;
     border-radius: 8px;
 }
@@ -176,12 +177,26 @@ button {
     cursor: pointer;
 }
 
+/* Кнопка удаления товара */
+.remove-btn {
+    background: #ef4444; /* красная */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 12px; /* чтобы не соприкасалась с + / - */
+}
+
+/* Итоговая сумма */
 #cart-total {
     margin-top: 12px;
     font-size: 18px;
     font-weight: bold;
 }
 
+/* Кнопка оплаты */
 #checkout-btn {
     margin-top: 10px;
     padding: 8px 12px;
@@ -193,31 +208,29 @@ button {
     cursor: pointer;
 }
 
-.remove-btn {
-    background: #ef4444; /* красная */
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 14px;
-    cursor: pointer;
-    margin-left: auto; /* сдвигает кнопку вправо */
-}
-
+/* Кнопка скролла вверх */
 #scrollTopBtn {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
     width: 50px;
     height: 50px;
-    background: #2563eb;
-    color: white;
+    background: #2a3a50; /* темный оттенок синего */
+    color: #a0c4ff; /* светлый для стрелки */
     border: none;
     border-radius: 50%;
     font-size: 24px;
     cursor: pointer;
-    display: none; /* скрыта по умолчанию */
+    display: none;
     z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: background 0.2s;
 }
+
+#scrollTopBtn:hover {
+    background: #3b4f70;
+}
+
 
 
