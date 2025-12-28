@@ -171,18 +171,25 @@ function updateCartUI() {
 
     // ===== КНОПКА СКРОЛЛ ВВЕРХ =====
     const scrollBtn = document.getElementById("scrollTopBtn");
+    let lastScroll = window.scrollY;
 
     window.addEventListener("scroll", () => {
-        if (window.scrollY > 200) {
+        const currentScroll = window.scrollY;
+
+        if (currentScroll < lastScroll && currentScroll > 100) {
+            // листаем вверх
             scrollBtn.style.display = "block";
         } else {
             scrollBtn.style.display = "none";
         }
+
+        lastScroll = currentScroll;
     });
 
     scrollBtn.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
+
 
     // ===== КНОПКА ПЕРЕХОДА В КОРЗИНУ =====
     cartButton.addEventListener("click", () => {
