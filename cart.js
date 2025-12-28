@@ -6,8 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function renderCart() {
         cartItemsEl.innerHTML = "";
+        let total = 0;
 
         cart.forEach((item, index) => {
+            const itemTotal = item.price * item.qty;
+            total += itemTotal;
+
             const div = document.createElement("div");
             div.className = "cart-item";
             div.innerHTML = `
@@ -15,62 +19,52 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="cart-info">
                     <h3>${item.name}</h3>
                     <p>Цена: ${item.price} ₽</p>
-                    <p>Количество: ${item.qty}</p>
                     <div class="qty-controls">
-                        <button class="minus-btn">-</button>
+                        <button class="minus">-</button>
                         <span>${item.qty}</span>
-                        <button class="plus-btn">+</button>
+                        <button class="plus">+</button>
                     </div>
-                    <button class="remove-btn">Удалить</button>
                 </div>
+                <button class="remove-btn">Удалить</button>
             `;
+            cartItemsEl.appendChild(div);
 
-            // Удаление с подтверждением
-            div.querySelector(".remove-btn").addEventListener("click", () => {
-                if (confirm(`Вы уверены, что хотите удалить "${item.name}" из корзины?`)) {
-                    cart.splice(index, 1);
-                    localStorage.setItem("cart", JSON.stringify(cart));
-                    renderCart();
-                    updateTotal();
-                    updateCartCounter();
-                }
+            // Кнопка +
+            div.querySelector(".plus").addEventListener("click", () => {
+                item.qty += 1;
+                saveCart();
+                renderCart();
             });
 
-            // Изменение количества
-            div.querySelector(".minus-btn").addEventListener("click", () => {
+            // Кнопка -
+            div.querySelector(".minus").addEventListener("click", () => {
                 if (item.qty > 1) {
                     item.qty -= 1;
-                    localStorage.setItem("cart", JSON.stringify(cart));
+                } else {
+                    if (confirm(`Вы хотите удалить "${item.name}" из корзины?`)) {
+                        cart.splice(index, 1);
+                    }
+                }
+                saveCart();
+                renderCart();
+            });
+
+            // Кнопка удалить
+            div.querySelector(".remove-btn").addEventListener("click", () => {
+                if (confirm(`Вы хотите удалить "${item.name}" из корзины?`)) {
+                    cart.splice(index, 1);
+                    saveCart();
                     renderCart();
-                    updateTotal();
-                    updateCartCounter();
                 }
             });
-            div.querySelector(".plus-btn").addEventListener("click", () => {
-                item.qty += 1;
-                localStorage.setItem("cart", JSON.stringify(cart));
-                renderCart();
-                updateTotal();
-                updateCartCounter();
-            });
-
-            cartItemsEl.appendChild(div);
         });
-    }
 
-    function updateTotal() {
-        const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
         totalPriceEl.innerText = `${total} ₽`;
     }
 
-    function updateCartCounter() {
-        const countEl = document.getElementById("cart-count");
-        const count = cart.reduce((sum, item) => sum + item.qty, 0);
-        countEl.innerText = count;
+    function saveCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
     }
 
-    // Инициализация
     renderCart();
-    updateTotal();
-    updateCartCounter();
 });
