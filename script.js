@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             puffs: "-",
             price: 600,
             type: "juice",
-            img: "https://github.com/ziaz12/tg_vp_shop_web/raw/main/images/juice1.jpg"
+            img: "https://github.com/ziaz12/tg_vp_shop_web/raw/main/images/vape1.jpg"
         },
         {
             name: "Snus Mint Pack",
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
             puffs: "-",
             price: 500,
             type: "snus",
-            img: "https://github.com/ziaz12/tg_vp_shop_web/raw/main/images/snus1.jpg"
+            img: "https://github.com/ziaz12/tg_vp_shop_web/raw/main/images/vape1.jpg"
         },
         {
             name: "Pod Recharge Pro",
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             puffs: "Перезаряжаемая",
             price: 5000,
             type: "pod",
-            img: "https://github.com/ziaz12/tg_vp_shop_web/raw/main/images/pod1.jpg"
+            img: "https://github.com/ziaz12/tg_vp_shop_web/raw/main/images/vape1.jpg"
         }
     ];
 
