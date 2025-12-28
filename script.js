@@ -5,12 +5,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ===== ТОВАРЫ =====
     const products = [
-        {name: "Vape Strawberry 500", brand: "VapeCo", flavor: "Клубника", puffs: "500", price: 1200, type: "vape"},
-        {name: "Vape Mint 800", brand: "VapeTech", flavor: "Мята", puffs: "800", price: 1500, type: "vape"},
-        {name: "Juice Mango 30ml", brand: "VapeCo", flavor: "Манго", puffs: "-", price: 600, type: "juice"},
-        {name: "Snus Mint Pack", brand: "SnusCo", flavor: "Мята", puffs: "-", price: 500, type: "snus"},
-        {name: "Pod Recharge Pro", brand: "VapePro", flavor: "Табак", puffs: "Перезаряжаемая", price: 5000, type: "pod"}
-    ];
+    {
+        name: "Vape Strawberry 500",
+        brand: "VapeCo",
+        flavor: "Клубника",
+        puffs: "500",
+        price: 1200,
+        type: "vape",
+        img: "images/vape1.jpg"
+    },
+    {
+        name: "Vape Mint 800",
+        brand: "VapeTech",
+        flavor: "Мята",
+        puffs: "800",
+        price: 1500,
+        type: "vape",
+        img: "images/vape2.png"
+    },
+    {
+        name: "Juice Mango 30ml",
+        brand: "VapeCo",
+        flavor: "Манго",
+        puffs: "-",
+        price: 600,
+        type: "juice",
+        img: "images/juice1.png"
+    },
+    {
+        name: "Snus Mint Pack",
+        brand: "SnusCo",
+        flavor: "Мята",
+        puffs: "-",
+        price: 500,
+        type: "snus",
+        img: "images/snus1.png"
+    },
+    {
+        name: "Pod Recharge Pro",
+        brand: "VapePro",
+        flavor: "Табак",
+        puffs: "Перезаряжаемая",
+        price: 5000,
+        type: "pod",
+        img: "images/pod1.png"
+    }
+];
+
 
     const productList = document.getElementById("product-list");
     const searchInput = document.getElementById("search-input");
