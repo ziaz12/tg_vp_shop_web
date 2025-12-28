@@ -1,3 +1,4 @@
+/* ===== ОСНОВА ===== */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -5,6 +6,7 @@ body {
     color: #eaeaf0;
 }
 
+/* ===== ШАПКА ===== */
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -16,14 +18,12 @@ body {
     z-index: 1000;
 }
 
-
 .header-right {
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
-/* КНОПКА КОРЗИНЫ */
+/* ===== КНОПКА КОРЗИНЫ ===== */
 #cart-button {
     background: none;
     border: none;
@@ -32,20 +32,18 @@ body {
     padding: 0;
 }
 
-/* ИКОНКА КОРЗИНЫ */
 .cart-icon {
-    width: 26px !important;
-    height: 26px !important;
-    display: block;
+    width: 26px;
+    height: 26px;
     filter: invert(100%);
 }
 
-/* СЧЁТЧИК ТОВАРОВ */
+/* СЧЁТЧИК В КОРЗИНЕ */
 #cart-count {
     position: absolute;
     top: -6px;
     right: -6px;
-    background: #3b82f6;
+    background: #334155;
     color: white;
     border-radius: 999px;
     padding: 2px 6px;
@@ -53,6 +51,7 @@ body {
     font-weight: bold;
 }
 
+/* ===== ПОИСК И ФИЛЬТРЫ ===== */
 #search-section,
 #filters {
     padding: 10px;
@@ -72,11 +71,11 @@ button {
 
 button {
     cursor: pointer;
-    background: #2563eb;
-    color: white;
+    background: #1e293b; /* тёмный */
+    color: #eaeaf0;
 }
 
-/* Сетка товаров */
+/* ===== СЕТКА ТОВАРОВ ===== */
 #product-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -84,16 +83,20 @@ button {
     padding: 12px;
 }
 
-/* Карточка товара */
+/* ===== КАРТОЧКА ТОВАРА ===== */
 .product-card {
     background: #121b2f;
     border-radius: 12px;
     padding: 10px;
     text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 🔥 ЦЕНТР */
 }
 
 .product-card h3 {
-    margin-bottom: 6px;
+    margin: 6px 0;
 }
 
 .product-card p {
@@ -101,122 +104,73 @@ button {
     font-size: 14px;
 }
 
+/* КНОПКА "ДОБАВИТЬ" */
 .product-card button {
-    margin-top: 6px;
+    margin-top: 8px;
     width: 100%;
 }
 
-/* Изображение товара */
+/* ===== ИЗОБРАЖЕНИЕ ===== */
 .product-img {
     width: 100%;
-    aspect-ratio: 1 / 1; /* квадрат */
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 8px;
 }
 
-/* Адаптация для мобильных: 2 товара в ряд */
+/* ===== СЧЁТЧИК + − В КАРТОЧКЕ ===== */
+.qty-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 🔥 ПО ЦЕНТРУ */
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.qty-controls span {
+    min-width: 24px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.qty-controls button {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #eaeaf0;
+    font-size: 18px;
+}
+
+/* ===== МОБИЛКА ===== */
 @media (max-width: 600px) {
     #product-list {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-#cart-section {
-    padding: 20px;
-}
-
-#cart-items {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.cart-item {
-    display: flex;
-    gap: 12px;
-    background: #121b2f;
-    padding: 10px;
-    border-radius: 12px;
-    align-items: center;
-}
-
-.cart-img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.cart-info h3 {
-    margin: 0;
-    font-size: 16px;
-}
-
-.cart-info p {
-    margin: 2px 0;
-    font-size: 14px;
-}
-
-.qty-controls {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 6px;
-}
-
-.qty-controls button {
-    width: 28px;
-    height: 28px;
-    border: none;
-    border-radius: 6px;
-    background: #2563eb;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-#cart-total {
-    margin-top: 12px;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-#checkout-btn {
-    margin-top: 10px;
-    padding: 8px 12px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    background: #3b82f6;
-    color: white;
-    cursor: pointer;
-}
-
-.remove-btn {
-    background: #ef4444; /* красная */
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 14px;
-    cursor: pointer;
-    margin-left: auto; /* сдвигает кнопку вправо */
-}
-
+/* ===== КНОПКА СКРОЛЛА ВВЕРХ ===== */
 #scrollTopBtn {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    background: #2563eb;
-    color: white;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%); /* 🔥 центр по ширине */
+
+    width: 52px;
+    height: 52px;
+
+    background: #1e293b;
+    color: #eaeaf0;
+
     border: none;
     border-radius: 50%;
-    font-size: 24px;
+    font-size: 20px;
+    line-height: 1;
+
     cursor: pointer;
-    display: none; /* скрыта по умолчанию */
+    display: none;
     z-index: 1000;
 }
 
