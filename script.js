@@ -195,7 +195,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     scrollBtn.onclick = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // сразу скрываем кнопку
+        scrollBtn.style.display = "none";
     };
+
 
     /* ================= START ================= */
     renderProducts();
