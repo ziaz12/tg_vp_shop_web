@@ -179,13 +179,17 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ================= SCROLL TOP ================= */
     const scrollBtn = document.getElementById("scrollTopBtn");
     let lastScroll = window.scrollY;
+    let isAutoScroll = false;
 
     window.addEventListener("scroll", () => {
+        if (isAutoScroll) return;
+
         const current = window.scrollY;
 
         if (current < lastScroll && current > 100) {
             scrollBtn.style.display = "block";
         }
+
         if (current > lastScroll) {
             scrollBtn.style.display = "none";
         }
@@ -194,20 +198,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     scrollBtn.addEventListener("click", () => {
-        // 🔥 сразу скрываем кнопку
+        isAutoScroll = true;
         scrollBtn.style.display = "none";
 
-        // 🔝 потом скроллим вверх
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         });
+
+        setTimeout(() => {
+            isAutoScroll = false;
+        }, 600);
     });
-
-
 
     /* ================= START ================= */
     renderProducts();
     updateCartUI();
 });
-
