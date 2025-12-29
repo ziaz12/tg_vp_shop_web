@@ -260,3 +260,15 @@ button {
     min-width: 160px;
 }
 
+/* ===== СКИДКА ===== */
+.discount-line {
+    color: #22c55e; /* зелёный */
+    font-weight: 700;
+}
+
+/* К оплате — выделяем */
+.final-line {
+    font-size: 20px;
+    font-weight: 800;
+}
+
