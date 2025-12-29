@@ -256,3 +256,7 @@ button {
     background: #1d4ed8;
 }
 
+#filters select {
+    min-width: 160px;
+}
+

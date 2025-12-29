@@ -1,8 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ===== КОРЗИНА =====
+
+    /* ================= CART ================= */
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    // ===== ТОВАРЫ =====
+    function saveCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function updateCartUI() {
+        const count = cart.reduce((sum, i) => sum + i.qty, 0);
+        cartCountEl.textContent = count;
+    }
+
+    /* ================= PRODUCTS ================= */
     const products = [
         {
             name: "Vape Strawberry 500",
@@ -51,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
-    // ===== ЭЛЕМЕНТЫ DOM =====
+    /* ================= DOM ================= */
     const productList = document.getElementById("product-list");
     const searchInput = document.getElementById("search-input");
     const brandFilter = document.getElementById("brand-filter");
@@ -59,148 +69,135 @@ document.addEventListener("DOMContentLoaded", () => {
     const puffsFilter = document.getElementById("puffs-filter");
     const priceFilter = document.getElementById("price-filter");
     const typeFilter = document.getElementById("type-filter");
+    const sortFilter = document.getElementById("sort-filter");
+
     const filterBtn = document.getElementById("filter-btn");
     const searchBtn = document.getElementById("search-btn");
+
     const cartCountEl = document.getElementById("cart-count");
-    const cartButton = document.getElementById("cart-button"); // кнопка корзины
+    const cartButton = document.getElementById("cart-button");
 
-    // ===== РЕНДЕР ТОВАРОВ =====
+    /* ================= RENDER ================= */
     function renderProducts() {
-    productList.innerHTML = "";
+        productList.innerHTML = "";
 
-    const search = searchInput.value.toLowerCase();
-    const brand = brandFilter.value;
-    const flavor = flavorFilter.value;
-    const puffs = puffsFilter.value;
-    const priceMax = parseInt(priceFilter.value);
-    const type = typeFilter.value;
+        const search = searchInput.value.toLowerCase();
+        const brand = brandFilter.value;
+        const flavor = flavorFilter.value;
+        const puffs = puffsFilter.value;
+        const priceMax = parseInt(priceFilter.value);
+        const type = typeFilter.value;
 
-    products.forEach(p => {
-        const matches =
+        let filtered = products.filter(p =>
             (!search || p.name.toLowerCase().includes(search)) &&
             (!brand || p.brand === brand) &&
             (!flavor || p.flavor === flavor) &&
             (!puffs || p.puffs === puffs) &&
             (!priceMax || p.price <= priceMax) &&
-            (!type || p.type === type);
+            (!type || p.type === type)
+        );
 
-        if (!matches) return;
-
-        const div = document.createElement("div");
-        div.className = "product-card";
-        div.innerHTML = `
-            <img src="${p.img}" class="product-img">
-            <h3>${p.name}</h3>
-            <div class="price">${p.price} ₽</div>
-            <p>Затяжки: ${p.puffs}</p>
-            <p>Вкус: ${p.flavor}</p>
-            <p>Бренд: ${p.brand}</p>
-            <div class="cart-action">
-                <button class="add-btn">Добавить в корзину</button>
-            </div>
-        `;
-        productList.appendChild(div);
-
-        const cartAction = div.querySelector(".cart-action");
-
-        function updateButton() {
-            const item = cart.find(i => i.name === p.name);
-            if (item) {
-                cartAction.innerHTML = `
-                    <div class="qty-controls">
-                        <button class="minus">-</button>
-                        <span>${item.qty}</span>
-                        <button class="plus">+</button>
-                    </div>
-                `;
-
-                cartAction.querySelector(".plus").addEventListener("click", () => {
-                    item.qty += 1;
-                    saveCart();
-                    updateButton();
-                    updateCartUI();
-                });
-
-                cartAction.querySelector(".minus").addEventListener("click", () => {
-                    if (item.qty > 1) {
-                        item.qty -= 1;
-                    } else {
-                        cart = cart.filter(i => i.name !== p.name);
-                    }
-                    saveCart();
-                    updateButton();
-                    updateCartUI();
-                });
-            } else {
-                cartAction.innerHTML = `<button class="add-btn">Добавить в корзину</button>`;
-                cartAction.querySelector(".add-btn").addEventListener("click", () => {
-                    cart.push({ ...p, qty: 1 });
-                    saveCart();
-                    updateButton();
-                    updateCartUI();
-                });
-            }
+        /* ===== SORT ===== */
+        if (sortFilter.value === "price-asc") {
+            filtered.sort((a, b) => a.price - b.price);
+        }
+        if (sortFilter.value === "price-desc") {
+            filtered.sort((a, b) => b.price - a.price);
         }
 
-        updateButton();
-    });
-}
+        filtered.forEach(p => {
+            const div = document.createElement("div");
+            div.className = "product-card";
+            div.innerHTML = `
+                <img src="${p.img}" class="product-img">
+                <h3>${p.name}</h3>
+                <div class="price">${p.price} ₽</div>
+                <p>Затяжки: ${p.puffs}</p>
+                <p>Вкус: ${p.flavor}</p>
+                <p>Бренд: ${p.brand}</p>
+                <div class="cart-action"></div>
+            `;
+            productList.appendChild(div);
 
-function saveCart() {
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
+            const cartAction = div.querySelector(".cart-action");
 
-function updateCartUI() {
-    const count = cart.reduce((sum, i) => sum + i.qty, 0);
-    cartCountEl.innerText = count;
-}
+            function updateButton() {
+                const item = cart.find(i => i.name === p.name);
 
+                if (item) {
+                    cartAction.innerHTML = `
+                        <div class="qty-controls">
+                            <button class="minus">-</button>
+                            <span>${item.qty}</span>
+                            <button class="plus">+</button>
+                        </div>
+                    `;
 
-    // ===== ОБНОВЛЕНИЕ СЧЁТЧИКА КОРЗИНЫ =====
-    function updateCartUI() {
-        const count = cart.reduce((sum, i) => sum + i.qty, 0);
-        cartCountEl.innerText = count;
+                    cartAction.querySelector(".plus").onclick = () => {
+                        item.qty++;
+                        saveCart();
+                        updateButton();
+                        updateCartUI();
+                    };
+
+                    cartAction.querySelector(".minus").onclick = () => {
+                        if (item.qty > 1) item.qty--;
+                        else cart = cart.filter(i => i.name !== p.name);
+
+                        saveCart();
+                        updateButton();
+                        updateCartUI();
+                    };
+                } else {
+                    cartAction.innerHTML = `<button class="add-btn">Добавить в корзину</button>`;
+                    cartAction.querySelector(".add-btn").onclick = () => {
+                        cart.push({ ...p, qty: 1 });
+                        saveCart();
+                        updateButton();
+                        updateCartUI();
+                    };
+                }
+            }
+
+            updateButton();
+        });
     }
 
-    // ===== ОБРАБОТЧИКИ =====
-    filterBtn.addEventListener("click", renderProducts);
-    searchBtn.addEventListener("click", renderProducts);
+    /* ================= EVENTS ================= */
+    filterBtn.onclick = renderProducts;
+    searchBtn.onclick = renderProducts;
+    sortFilter.onchange = renderProducts;
+
     searchInput.addEventListener("keydown", e => {
         if (e.key === "Enter") renderProducts();
     });
 
-    // ===== КНОПКА СКРОЛЛ ВВЕРХ =====
+    cartButton.onclick = () => {
+        window.location.href = "cart.html";
+    };
+
+    /* ================= SCROLL TOP ================= */
     const scrollBtn = document.getElementById("scrollTopBtn");
-let lastScroll = window.scrollY;
+    let lastScroll = window.scrollY;
 
-window.addEventListener("scroll", () => {
-    const currentScroll = window.scrollY;
+    window.addEventListener("scroll", () => {
+        const current = window.scrollY;
 
-    if (currentScroll > lastScroll) {
-        // листаем вниз → скрываем кнопку
-        scrollBtn.style.display = "none";
-    } else if (currentScroll < lastScroll) {
-        // листаем вверх → показываем кнопку
-        if (currentScroll > 100) {
+        if (current < lastScroll && current > 100) {
             scrollBtn.style.display = "block";
         }
-    }
+        if (current > lastScroll) {
+            scrollBtn.style.display = "none";
+        }
 
-    lastScroll = currentScroll;
-});
-
-scrollBtn.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-
-
-    // ===== КНОПКА ПЕРЕХОДА В КОРЗИНУ =====
-    cartButton.addEventListener("click", () => {
-        window.location.href = "cart.html"; // создаём отдельную страницу cart.html
+        lastScroll = current;
     });
 
-    // ===== СТАРТ =====
+    scrollBtn.onclick = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    /* ================= START ================= */
     renderProducts();
     updateCartUI();
 });
