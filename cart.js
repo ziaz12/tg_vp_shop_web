@@ -6,6 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const discountEl = document.getElementById("discount");
     const finalEl = document.getElementById("final");
     const checkoutBtn = document.getElementById("checkout-btn");
+    const discountRow = document.getElementById("discount-row");
+
+    function saveCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+    }
 
     function renderCart() {
         cartItemsEl.innerHTML = "";
@@ -21,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="cart-info">
                     <h3>${item.name}</h3>
                     <p>${item.price} ₽</p>
+
                     <div class="qty-controls">
                         <button class="minus">-</button>
                         <span>${item.qty}</span>
@@ -33,18 +40,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             div.querySelector(".plus").onclick = () => {
                 item.qty++;
-                save();
+                saveCart();
             };
 
             div.querySelector(".minus").onclick = () => {
                 if (item.qty > 1) item.qty--;
                 else cart.splice(index, 1);
-                save();
+                saveCart();
             };
 
             div.querySelector(".remove-btn").onclick = () => {
                 cart.splice(index, 1);
-                save();
+                saveCart();
             };
         });
 
@@ -52,15 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
         calculateDiscount(sum);
     }
 
-    function save() {
-        localStorage.setItem("cart", JSON.stringify(cart));
-        renderCart();
-    }
-
     async function calculateDiscount(sum) {
         if (sum === 0) {
             discountEl.textContent = 0;
             finalEl.textContent = 0;
+            discountRow.style.display = "none";
             return;
         }
 
@@ -68,20 +71,21 @@ document.addEventListener("DOMContentLoaded", () => {
             const res = await fetch(`http://127.0.0.1:8000/calc?amount=${sum}`);
             const data = await res.json();
 
-            console.log("BACKEND RESPONSE:", data); // 👈 важно
-
             discountEl.textContent = data.discount;
             finalEl.textContent = data.to_pay;
-        } catch (e) {
-            console.error("ERROR:", e);
-            discountEl.textContent = "—";
-            finalEl.textContent = "—";
+
+            discountRow.style.display = data.discount > 0 ? "block" : "none";
+
+        } catch (err) {
+            console.error("BACKEND ERROR:", err);
+            discountEl.textContent = 0;
+            finalEl.textContent = sum;
+            discountRow.style.display = "none";
         }
     }
 
-
     checkoutBtn.onclick = () => {
-        if (cart.length === 0) {
+        if (!cart.length) {
             alert("Корзина пустая");
             return;
         }
@@ -95,4 +99,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     renderCart();
 });
+
 
