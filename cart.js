@@ -1,62 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const cartItemsEl = document.getElementById("cart-items");
-    const totalPriceEl = document.getElementById("total-price");
-    const discountEl = document.getElementById("cart-discount");
-    const finalEl = document.getElementById("cart-final");
+    const sumEl = document.getElementById("sum");
+    const discountEl = document.getElementById("discount");
+    const finalEl = document.getElementById("final");
     const checkoutBtn = document.getElementById("checkout-btn");
 
-    /* ===== СОХРАНЕНИЕ ===== */
-    function saveCart() {
-        localStorage.setItem("cart", JSON.stringify(cart));
-    }
-
-    /* ===== СКИДКИ ===== */
-    function calculateDiscount(subtotal) {
-        let discount = 0;
-        let text = "";
-
-        if (subtotal >= 10000) {
-            discount = Math.floor(subtotal * 0.15);
-            text = "15%";
-        } else if (subtotal >= 7500) {
-            discount = 1800;
-            text = "−1800 ₽";
-        } else if (subtotal >= 5000) {
-            discount = 1000;
-            text = "−1000 ₽";
-        } else if (subtotal >= 3000) {
-            discount = 500;
-            text = "−500 ₽";
-        } else if (subtotal >= 2000) {
-            discount = 200;
-            text = "−200 ₽";
-        }
-
-        return { discount, text };
-    }
-
-    /* ===== ОТРИСОВКА ===== */
     function renderCart() {
         cartItemsEl.innerHTML = "";
-        let subtotal = 0;
-
-        if (cart.length === 0) {
-            cartItemsEl.innerHTML = "<p>Корзина пуста</p>";
-            totalPriceEl.innerText = "0 ₽";
-            discountEl.innerText = "";
-            finalEl.innerText = "";
-            checkoutBtn.disabled = true;
-            return;
-        }
-
-        checkoutBtn.disabled = false;
+        let sum = 0;
 
         cart.forEach((item, index) => {
-            const itemTotal = item.price * item.qty;
-            subtotal += itemTotal;
+            sum += item.price * item.qty;
 
             const div = document.createElement("div");
             div.className = "cart-item";
@@ -64,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <img src="${item.img}" class="cart-img">
                 <div class="cart-info">
                     <h3>${item.name}</h3>
-                    <p>Цена: ${item.price} ₽</p>
+                    <p>${item.price} ₽</p>
                     <div class="qty-controls">
                         <button class="minus">-</button>
                         <span>${item.qty}</span>
@@ -75,54 +31,59 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             cartItemsEl.appendChild(div);
 
-            /* + */
             div.querySelector(".plus").onclick = () => {
                 item.qty++;
-                saveCart();
-                renderCart();
+                save();
             };
 
-            /* - */
             div.querySelector(".minus").onclick = () => {
-                if (item.qty > 1) {
-                    item.qty--;
-                } else if (confirm(`Удалить "${item.name}" из корзины?`)) {
-                    cart.splice(index, 1);
-                }
-                saveCart();
-                renderCart();
+                if (item.qty > 1) item.qty--;
+                else cart.splice(index, 1);
+                save();
             };
 
-            /* удалить */
             div.querySelector(".remove-btn").onclick = () => {
-                if (confirm(`Удалить "${item.name}" из корзины?`)) {
-                    cart.splice(index, 1);
-                    saveCart();
-                    renderCart();
-                }
+                cart.splice(index, 1);
+                save();
             };
         });
 
-        /* ===== ИТОГ ===== */
-        const { discount, text } = calculateDiscount(subtotal);
-        const finalTotal = subtotal - discount;
-
-        totalPriceEl.innerText = `${subtotal} ₽`;
-
-        if (discount > 0) {
-            discountEl.innerText = `Скидка: ${text}`;
-            finalEl.innerText = `Итого к оплате: ${finalTotal} ₽`;
-        } else {
-            discountEl.innerText = "";
-            finalEl.innerText = `Итого к оплате: ${subtotal} ₽`;
-        }
+        sumEl.textContent = sum;
+        calculateDiscount(sum);
     }
 
-    /* ===== ОПЛАТА (ПОКА ЗАГЛУШКА) ===== */
+    function save() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+    }
+
+    async function calculateDiscount(sum) {
+        if (sum === 0) {
+            discountEl.textContent = 0;
+            finalEl.textContent = 0;
+            return;
+        }
+
+        const res = await fetch(`http://127.0.0.1:8000/calc?amount=${sum}`);
+        const data = await res.json();
+
+        discountEl.textContent = data.discount;
+        finalEl.textContent = data.to_pay;
+    }
+
     checkoutBtn.onclick = () => {
-        alert("Дальше будет оплата через CryptoCloud 💳");
-        // тут позже будет запрос на сервер
+        if (cart.length === 0) {
+            alert("Корзина пустая");
+            return;
+        }
+
+        alert(
+            `Сумма: ${sumEl.textContent} ₽\n` +
+            `Скидка: ${discountEl.textContent} ₽\n` +
+            `К оплате: ${finalEl.textContent} ₽`
+        );
     };
 
     renderCart();
 });
+
