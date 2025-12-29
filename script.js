@@ -193,12 +193,17 @@ document.addEventListener("DOMContentLoaded", () => {
         lastScroll = current;
     });
 
-    scrollBtn.onclick = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-
-        // сразу скрываем кнопку
+    scrollBtn.addEventListener("click", () => {
+        // 🔥 сразу скрываем кнопку
         scrollBtn.style.display = "none";
-    };
+
+        // 🔝 потом скроллим вверх
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+
 
 
     /* ================= START ================= */
