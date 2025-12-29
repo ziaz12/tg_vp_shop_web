@@ -64,12 +64,21 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const res = await fetch(`http://127.0.0.1:8000/calc?amount=${sum}`);
-        const data = await res.json();
+        try {
+            const res = await fetch(`http://127.0.0.1:8000/calc?amount=${sum}`);
+            const data = await res.json();
 
-        discountEl.textContent = data.discount;
-        finalEl.textContent = data.to_pay;
+            console.log("BACKEND RESPONSE:", data); // 👈 важно
+
+            discountEl.textContent = data.discount;
+            finalEl.textContent = data.to_pay;
+        } catch (e) {
+            console.error("ERROR:", e);
+            discountEl.textContent = "—";
+            finalEl.textContent = "—";
+        }
     }
+
 
     checkoutBtn.onclick = () => {
         if (cart.length === 0) {
